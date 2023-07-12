@@ -2,6 +2,7 @@
 'use client'
 
 // Imports
+import styles from './style.module.scss';
 import { TileData } from "@/data/data";
 import React, { Component, createRef } from "react"
 
@@ -65,26 +66,28 @@ export default class Tile extends Component<tileProps, tileState> {
     render(): React.ReactNode {
         const classColour = this.isDark ? 'dark ' : 'light ';
 		const classActive = this.state.active ? 'active ' : '';
-		const hoverClass = '';
+		const classHover = '';
 
 		const size = this.props.size;
-		const style = {
+		const inlineStyle = {
 			tileSize: {
 				width: size,
 				height: size
 			}
 		};
 
+        const className = [styles.tile, classColour, classActive, classHover].join(' ');
+
 		const { label, key, col, row, children, handleclick, ...rest } = this.props;
 
 		return (
 			<div id={label} key={key} 
-                className={'tile ' + classColour + classActive}
-                style={style.tileSize} 
+                className={className}
+                style={inlineStyle.tileSize} 
                 onClick={this.onClick} 
                 {...rest}
             >
-				<div className="inner">
+				<div className={styles.inner}>
 					<span>{label}</span>
 					{children}
 				</div>

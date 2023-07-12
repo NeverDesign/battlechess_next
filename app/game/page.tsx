@@ -2,8 +2,8 @@
 'use client'
 
 // Imports
-import React from "react"
-
+import styles from './page.module.scss';
+import React, { Ref } from "react"
 
 // Data
 import GameData, { TileData } from "@/data/data";
@@ -15,7 +15,10 @@ export default class Game extends React.Component {
     tiles: Tile[] = [];
     state: {
         tileData: TileData[]
-    }
+    };
+    board: any;
+    tileContainer: any;
+
 
     constructor (props:any) {
         console.log('Game: Constructor');
@@ -46,9 +49,28 @@ export default class Game extends React.Component {
     render () {
         this.tiles = this.generateTiles();
         const tileNodes = this.tiles.map((tile) => { return tile.render(); });
+        const boardStyle = {
+			width: this.boardSize + 'px'
+		};
 
         return (
-            <p>Hello</p>
+            <>
+                <header className={styles.header}>
+                    <h1>Battle Chess</h1>
+                </header>
+
+                <div className={'game'}>
+                    <main role={'main'} className={styles.main} style={{width: this.boardSize + 50 + 'px'}}>
+                        <div className={styles['container-board']} style={boardStyle}>
+                            <div className={styles['board player-1']} ref={this.board}>
+                                <div className={styles['container']} ref={ this.tileContainer }>
+                                    {tileNodes}
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </>
         )
     }
 }
