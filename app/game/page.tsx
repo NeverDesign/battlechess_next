@@ -10,8 +10,8 @@ import GameData, { TileData } from "@/data/data";
 import Tile from "@/components/tiles/Tile";
 
 export default class Game extends React.Component {
-    boardSize: number = 500;
-    gridSize: number = this.boardSize/8;
+    boardSize: number = 550;
+    gridSize: number = (this.boardSize - 20)/8;
     tiles: Tile[] = [];
     state: {
         tileData: TileData[]
@@ -50,7 +50,7 @@ export default class Game extends React.Component {
         this.tiles = this.generateTiles();
         const tileNodes = this.tiles.map((tile) => { return tile.render(); });
         const boardStyle = {
-			width: this.boardSize + 'px'
+			width: this.boardSize + 50 + 'px'
 		};
 
         return (
@@ -60,7 +60,7 @@ export default class Game extends React.Component {
                 </header>
 
                 <div className={'game'}>
-                    <main role={'main'} className={styles.main} style={{width: this.boardSize + 50 + 'px'}}>
+                    <main role={'main'} className={styles.main} style={{width: this.boardSize + 'px'}}>
                         <div className={styles['container-board']} style={boardStyle}>
                             <div className={styles['board player-1']} ref={this.board}>
                                 <div className={styles['container']} ref={ this.tileContainer }>
