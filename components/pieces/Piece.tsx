@@ -47,7 +47,7 @@ export default class Piece extends React.Component {
 
     getAvailableMoves = ():string[] => {
         console.log('Piece: getAvailableMoves:');
-        let resultTiles = [];
+        let resultTiles:string[] = [];
         return resultTiles;
     }
 }

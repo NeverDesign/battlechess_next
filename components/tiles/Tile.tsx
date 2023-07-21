@@ -64,10 +64,9 @@ export default class Tile extends Component<tileProps, tileState> {
 	 * @purpose render the component
 	 */
     render(): React.ReactNode {
-        const classColour = this.isDark ? 'dark ' : 'light ';
-		const classActive = this.state.active ? 'active ' : 'inactive';
+        const classColour = this.isDark ? "dark" : "light";
+		const classActive = this.state.active ? "active" : "inactive";
 		const classHover = '';
-
 		const size = this.props.size;
 		const inlineStyle = {
 			tileSize: {
@@ -75,15 +74,13 @@ export default class Tile extends Component<tileProps, tileState> {
 				height: size
 			}
 		};
-
-        const className = [styles.tile, classColour, classActive, classHover].join(' ');
-
-		const { label, key, col, row, children, handleclick, ...rest } = this.props;
-
-//className={`${styles.tile} tile-${classColour} tile-${classActive}`}
+        const className = [styles.tile, styles[classColour], styles[classActive], classHover].join(' ');
+        const { label, key, col, row, children, handleclick, ...rest } = this.props;
+		
 
 		return (
 			<div id={label} key={key} 
+                // className={`${styles[classColour]}`}
                 className={className}
                 style={inlineStyle.tileSize} 
                 onClick={this.onClick} 

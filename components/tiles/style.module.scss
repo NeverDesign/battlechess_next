@@ -1,12 +1,14 @@
 // Imports
 @import '../../app/theme/colours.scss';
+@import '../../app/theme/sizes.scss';
 
 .tile {
+	font-size: $font-size-xs;
 	position: relative;
 	transition-duration: 0.2s;
 
 	&.light {
-
+		background: transparentize($white, 0.92);
 	}
 
 	&.dark {
