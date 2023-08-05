@@ -1,5 +1,5 @@
 // Imports
-@import '../theme/colours.scss';
+@import '../../app/theme/colours.scss';
 
 .header {
 	text-align: center;
@@ -17,11 +17,12 @@
 	flex-wrap: wrap;
 	width: 100%;
 	position: relative;
+	box-shadow: 0px 0px 3px red;
 }
 
 .container-board {
 	background: $boardBg;
-	padding: 10px;
+	position: relative;
 }
 
 .player-1 {
@@ -42,6 +43,8 @@
 }
 
 .container-pieces {
+	box-shadow: 0px 0px 3px#0fc;
+
 	position: absolute;
 	top: 0;
 	left: 0;

@@ -9,7 +9,7 @@ import React, { Component, createRef } from "react"
 // Types
 type tileProps =  { 
     label: string, 
-    key: string, 
+    key: number, 
     col: TileData["col"], 
     row: TileData["row"], 
     children: any, 
@@ -74,14 +74,14 @@ export default class Tile extends Component<tileProps, tileState> {
 				height: size
 			}
 		};
-        const className = [styles.tile, styles[classColour], styles[classActive], classHover].join(' ');
+        const classes = [styles.tile, styles[classColour], styles[classActive], classHover].join(' ');
         const { label, key, col, row, children, handleclick, ...rest } = this.props;
 		
 
 		return (
 			<div id={label} key={key} 
                 // className={`${styles[classColour]}`}
-                className={className}
+                className={classes}
                 style={inlineStyle.tileSize} 
                 onClick={this.onClick} 
                 {...rest}

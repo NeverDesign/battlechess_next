@@ -1,4 +1,4 @@
-import Piece from './Piece'
+import Piece from './GenericPiece'
 
 export default class Rook extends Piece {
     constructor( props:any, data: any ){

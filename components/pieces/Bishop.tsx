@@ -1,4 +1,4 @@
-import Piece from './Piece'
+import Piece from './GenericPiece'
 
 export default class Bishop extends Piece {
     constructor( props:any, data: any ){
@@ -46,8 +46,6 @@ export default class Bishop extends Piece {
                 }
             }
         }
-
-        console.log('Bishop: Result tiles: ', resultTiles);
 
         return resultTiles;
     };

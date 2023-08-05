@@ -3,26 +3,28 @@
 
 // Imports
 import styles from './page.module.scss';
-import React, { Ref } from "react"
+import React, { Ref, createRef } from "react"
 
 // Data
 import GameData, { PieceData, TileData } from "@/data/data";
 import Tile from "@/components/tiles/Tile";
-import Piece from "@/components/pieces/Piece";
 import Rook from '@/components/pieces/Rook';
 import Bishop from '@/components/pieces/Bishop';
+import { Piece } from '@/components/pieces/Piece';
+import GenericPiece from '@/components/pieces/GenericPiece';
 
 export default class Game extends React.Component {
     boardSize: number = 550;
-    gridSize: number = (this.boardSize - 20)/8;
+    gridSize: number = (this.boardSize)/8;
     tiles: Tile[] = [];
     pieces: Piece[] = [];
     state: {
         tileData: TileData[],
-        piecesData: Piece[]
+        piecesData: PieceData[]
     };
-    board: any;
-    tileContainer: any;
+    board: any = React.createRef();
+    tileContainer: any = React.createRef();
+    pieceContainer: any = React.createRef();
 
     constructor (props:any) {
         console.log('Game: Constructor');
@@ -49,7 +51,7 @@ export default class Game extends React.Component {
             // Set the props
             let props = {
                 key: data.id,
-                label: 'tile-' + data.id,
+                label: `tile-${data.id}`,
                 size: this.gridSize,
             }
             // Create an return a new Tile
@@ -59,21 +61,83 @@ export default class Game extends React.Component {
         return tiles;
     };
 
+    /**
+     * @function getTileRef
+     * @purpose looks up a tile's reference key (ID) by column and row
+     * 
+     * @param col 
+     * @param row 
+     * 
+     * @returns number|null
+     */
+    getTileRef = ( col: string, row: string ) => {
+        let tileRef:number|null = null;
+
+        let results = this.state.tileData.map((data) => {
+            if ( data.col === col && data.row === row ){
+                tileRef = data.id;
+            }
+        });
+
+        return tileRef;
+    };
+
+    /**
+	 * @function getTilePosition
+	 * @purpose get the x, y, row and col info for a specific tile
+	 *
+	 * @param tileRef
+	 * @returns {{col: *, x: number, y: number, row: number}}
+	 */
+	getTilePosition = ( tileRef:number ) => {
+		let x, y, row, col;
+		let targetTileNode = null;
+		const tileClasses = this.tiles;
+
+		// Loop through the tiles to find the one that matches and grab it's position info
+		for(let i = 0; i < tileClasses.length; i++ ){
+			if( tileClasses[i].props.key === tileRef ){
+				// Set the destinationTileNode to the current class
+				targetTileNode = this.tileContainer.current.children[i];
+
+				// Get the position and row/col data
+				x = targetTileNode.offsetLeft;
+				y = targetTileNode.offsetTop;
+				col = tileClasses[i].col;
+				row = tileClasses[i].row;
+			}
+		}
+
+		// Return an object containing the position info
+		return { x, y, row, col };
+	};
+
+    /**
+     * @function generatePieces
+     * @purpose generate the pieceClasses required to play the game
+     * 
+     * @returns Pieces[]
+     */
     generatePieces = () => {
         console.log('Game: generatePieces');
         let pieces = [];
 
         pieces = this.state.piecesData.map((data) => {
             let piece:any = null;
+            let props = {
+                key: data.id,
+                label: `piece-${data.id}`,
+                size: this.gridSize
+            };
             switch (data.type) {
                 case 'rook':
-                    piece = new Rook( data );
+                    piece = new Rook( props, data );
                     break;
                 case 'bishop':
-                    piece = new Bishop( data );
+                    piece = new Bishop( props, data );
                     break;
                 default:
-                    piece = new Piece( data );
+                    piece = new GenericPiece( props, data );
             }
             return piece;
         });
@@ -82,15 +146,41 @@ export default class Game extends React.Component {
     };
 
     /**
+	 * @function componentDidMount
+	 * @purpose run when the component is mounted and ready for use, after initial render
+	 */
+	componentDidMount() {
+		console.log('Game: componentDidMount: ', this.getTileRef('c', '1'));
+
+        // Update the piece data with the X and Y from the rendered tiles
+        let piecesDataTemp = this.state.piecesData;
+        this.state.piecesData.find((piece, index) => {
+            const tileRef = this.getTileRef( piece.col, piece.row );
+            const tilePosition = this.getTilePosition( tileRef );
+
+            piece.x = tilePosition.x;
+            piece.y = tilePosition.y;
+            piece.col = tilePosition.col;
+            piece.row = tilePosition.row;
+
+            piecesDataTemp[index] = piece;
+            
+            return null;
+        });
+        this.setState({piecesData: piecesDataTemp});
+    }
+
+    /**
      * @function render
      * @purpose render the game screen
      */
     render () {
         this.tiles = this.generateTiles();
-        // this.pieces = this.generatePieces();
+        this.pieces = this.generatePieces();
         const tileNodes = this.tiles.map((tile) => { return tile.render(); });
+        const pieceNodes = this.pieces.map((piece) => { return piece.render(); })
         const boardStyle = {
-			width: this.boardSize + 50 + 'px'
+			width: this.boardSize
 		};
 
         return (
@@ -106,10 +196,17 @@ export default class Game extends React.Component {
                                 <div className={styles['container']} ref={ this.tileContainer }>
                                     {tileNodes}
                                 </div>
+                                <div className={[styles.container, styles['container-pieces']].join(' ')} ref={ this.pieceContainer }>
+								    {pieceNodes}
+							    </div>
                             </div>
                         </div>
                     </main>
                 </div>
+
+                <code>
+                    <pre></pre>
+                </code>
             </>
         )
     }
