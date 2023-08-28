@@ -44,10 +44,9 @@ export default class Game extends React.Component {
      */
     generateTiles = ():Tile[] => {
         console.log('Game: generateTiles');
-        let tiles = [];
 
         // 1. Generate an array of Tile classes based on the tile data
-        tiles = this.state.tileData.map((data) => {
+        let tiles = this.state.tileData.map((data) => {
             // Set the props
             let props = {
                 key: data.id,
@@ -120,9 +119,8 @@ export default class Game extends React.Component {
      */
     generatePieces = () => {
         console.log('Game: generatePieces');
-        let pieces = [];
 
-        pieces = this.state.piecesData.map((data) => {
+         let pieces = this.state.piecesData.map((data) => {
             let piece:any = null;
             let props = {
                 key: data.id,
@@ -155,7 +153,7 @@ export default class Game extends React.Component {
         // Update the piece data with the X and Y from the rendered tiles
         let piecesDataTemp = this.state.piecesData;
         this.state.piecesData.find((piece, index) => {
-            const tileRef = this.getTileRef( piece.col, piece.row );
+            const tileRef:number|null = this.getTileRef( piece.col, piece.row );
             const tilePosition = this.getTilePosition( tileRef );
 
             piece.x = tilePosition.x;
